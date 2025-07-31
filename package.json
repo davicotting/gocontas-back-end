@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "test:unit": "vitest ./src/use-cases"
+    "test:unit": "vitest ./src/use-cases",
+    "build": "tsup src --out-dir build",
+    "start": "node build/server.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
     "dotenv": "^17.2.1",
     "fastify": "^5.4.0",
     "prisma": "^6.13.0",
+    "tsup": "^8.5.0",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "vite": "^7.0.6",

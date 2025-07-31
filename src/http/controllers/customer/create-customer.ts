@@ -8,15 +8,17 @@ export async function createCustomer(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const customerBodySchema = zod.object({
-    cpf: zod.string().min(11).max(11),
-    name: zod.string().min(3, "O seu nome deve ter no mínimo 3 caracteres"),
-    phone: zod.string().min(11).max(11),
-    email: zod.string().email(),
-    password_hash: zod
-      .string()
-      .min(6, "A senha deve conter no mínimo 6 caracteres"),
-  }).strict();
+  const customerBodySchema = zod
+    .object({
+      cpf: zod.string().min(11).max(11),
+      name: zod.string().min(3, "O seu nome deve ter no mínimo 3 caracteres"),
+      phone: zod.string().min(11).max(11),
+      email: zod.string().email(),
+      password_hash: zod
+        .string()
+        .min(6, "A senha deve conter no mínimo 6 caracteres"),
+    })
+    .strict();
 
   const { cpf, email, name, phone, password_hash } = customerBodySchema.parse(
     request.body
