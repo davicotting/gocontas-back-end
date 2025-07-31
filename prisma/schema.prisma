@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id String @id @default(uuid())
+
+  name   String @unique
+  email  String @unique
+  cpf    String @unique
+  phone  String
+  rating Float @default(0)
+  password_hash String
+
+  created_at DateTime @default(now())
+  updated_at DateTime? 
+
+  products Product[]
+
+  @@map("customer")
+}
+
+model Client {
+  id String @id @default(uuid())
+
+  name   String @unique
+  cpf    String @unique
+  phone  String
+  rating Float @default(0)
+
+  created_at DateTime  @default(now())
+  updated_at DateTime?  @default(now())
+  purchases  Product[]
+
+  @@map("client")
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String @unique
+
+  products Product[]
+
+  @@map("category")
+}
+
+model Product {
+  id String @id @default(uuid())
+
+  title       String
+  description String?
+
+  product_is_selled Boolean  @default(false)
+  created_at        DateTime @default(now())
+  updated_at        DateTime? @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id])
+
+  tags       Tag[]  @relation("productTags")
+  customerId String
+
+  buyer    Client? @relation(fields: [clientId], references: [id])
+  clientId String?
+
+  Category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  @@map("product")
+}
+
+model Tag {
+  id         String   @id @default(uuid())
+  name       String   @unique
+  created_at DateTime @default(now())
+
+  product Product[] @relation("productTags")
+
+  @@map("tag")
+}
